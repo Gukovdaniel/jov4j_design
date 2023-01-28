@@ -26,7 +26,7 @@ In the future, the project will consider the following topics:
 - Iterator
 - Generic
  
-#### Collections and Map
+### Collections and Map
 
 - List
 - Set
@@ -52,13 +52,13 @@ In the future, the project will consider the following topics:
 - JDBC
 - Liquibase
 
-##Garbage Collector
+###Garbage Collector
 
 - Garbage Collector
 - Type of link
 - Java Memory Model
 
-##OOD
+###OOD
 
 - TDD
 - SPR
@@ -67,9 +67,9 @@ In the future, the project will consider the following topics:
 - IPS
 - DIP
 
-##And a little more detail about the main sections.
+###And a little more detail about the main sections.
 
-####Classifying data structures
+###Classifying data structures
 
 There are many kinds of data structures, 
 ranging from single variables to arrays or linked lists 
@@ -77,7 +77,7 @@ of objects containing multiple fields.
 All data structures can be classified as primitives or 
 aggregates, and some are classified as containers.
 
-####Primitives vs aggregates
+###Primitives vs aggregates
 
 The simplest kind of data structure stores single data items; 
 for example, a variable that stores a Boolean value or a variable 
