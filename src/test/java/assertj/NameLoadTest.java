@@ -14,10 +14,34 @@ class NameLoadTest {
     }
 
     @Test
-    void checkParse() {
+    void checkParseEmpty() {
         NameLoad nameLoad = new NameLoad();
-        assertThatThrownBy(() -> nameLoad.parse("key="))
+        assertThatThrownBy(() -> nameLoad.parse())
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("");
+                .hasMessageContaining("is empty");
+    }
+
+    @Test
+    void checkParseContains() {
+        NameLoad nameLoad = new NameLoad();
+        assertThatThrownBy(() -> nameLoad.parse("key"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("=");
+    }
+
+    @Test
+    void checkParseStartsWith() {
+        NameLoad nameLoad = new NameLoad();
+        assertThatThrownBy(() -> nameLoad.parse("=key"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("key");
+    }
+
+    @Test
+    void checkParseIndexOf() {
+        NameLoad nameLoad = new NameLoad();
+        assertThatThrownBy(() -> nameLoad.parse("k="))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("value");
     }
 }
