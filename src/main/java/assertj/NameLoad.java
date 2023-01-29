@@ -46,16 +46,4 @@ public class NameLoad {
         }
         return values;
     }
-
-    static class Driver {
-        public static void main(String[] args)
-
-                throws Exception {
-            NameLoad nameLoad = new NameLoad();
-            Method method = NameLoad.class
-                    .getDeclaredMethod("validate");
-            method.setAccessible(true);
-            method.invoke(nameLoad);
-        }
-    }
 }
