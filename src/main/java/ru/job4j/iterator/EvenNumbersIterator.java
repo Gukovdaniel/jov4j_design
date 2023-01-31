@@ -12,17 +12,17 @@ public class EvenNumbersIterator implements Iterator<Integer> {
     }
 
     public boolean hasNext() {
-        while (index < (data.length - 1) && (data[index] % 2) != 0) {
+        while (index < (data.length) && (data[index] % 2) != 0) {
             index++;
             }
-        return index++ < data.length;
+        return index < data.length;
     }
 
     public Integer next() throws NoSuchElementException {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        return data[index];
+        return data[index++];
     }
     /**
      * В заголовке цикла while разместите условия -
