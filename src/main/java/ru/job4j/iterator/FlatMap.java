@@ -13,19 +13,15 @@ public class FlatMap<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         if (cursor == null || !cursor.hasNext()) {
-            cursor = getNextNonNllOrEmpty(data);
-        }
-        return cursor.hasNext();
-    }
-
-    private Iterator<T> getNextNonNllOrEmpty(Iterator<Iterator<T>> data) {
-        while (data.hasNext()) {
-            Iterator<T> next = data.next();
-            if (next != null && next.hasNext()) {
-                return next;
+            while (data.hasNext()) {
+                Iterator<T> next = data.next();
+                if (next != null && next.hasNext()) {
+                    cursor = next;
+                    return cursor.hasNext();
+                }
             }
         }
-        return cursor;
+        return cursor.hasNext();
     }
 
     @Override
