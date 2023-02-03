@@ -7,53 +7,35 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     private int modCount = 0;
     private Node<E> head;
 
-    private static class Node<E> {
-        private E item;
-        private Node<E> next;
-
-        Node(E element, Node<E> next) {
-            this.item = element;
-            this.next = next;
-        }
-    }
-
     @Override
     public void add(E value) {
-        Node<E> newNode = new Node<>(value, null);
-        if (this.head == null) {
-           this.head = newNode;
-           return;
-        }
-        Node<E> tail = head;
-        while (tail.next != null) {
-            tail = tail.next;
-        }
-            this.size++;
-        this.modCount++;
+        Node<E> newLink = new Node<>(value, null);
+        newLink.next = this.head;
+        this.head = newLink;
+        this.size++;
+        modCount++;
     }
 
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        Node<E> rsl = this.head;
+        Node<E> target = head.next;
         for (int i = 0; i < index; i++) {
-            rsl = rsl.next;
+            target = target.next;
         }
-        return head.item;
+        return target.item;
     }
 
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
+            private int cursor = 0;
             private int expectedModCount = modCount;
-            Node<E> current = null;
-            Node<E> prev = null;
-            Node<E> ensuing = head;
 
             @Override
             public boolean hasNext() {
                 checkModCount();
-                return ensuing != null;
+                return cursor < size;
             }
 
             @Override
@@ -62,10 +44,8 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                prev = current;
-                current = ensuing;
-                ensuing = ensuing.next;
-                return null;
+                cursor++;
+                return head.item;
             }
 
             private void checkModCount() {
@@ -74,5 +54,15 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 }
             }
         };
+    }
+
+    private static class Node<E> {
+        private E item;
+        private Node<E> next;
+
+        Node(E element, Node<E> next) {
+            this.item = element;
+            this.next = next;
+        }
     }
 }
