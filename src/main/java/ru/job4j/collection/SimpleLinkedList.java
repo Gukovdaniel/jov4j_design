@@ -19,12 +19,14 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
 
     @Override
     public void add(E value) {
-        Node<E> newNode = new Node<>(value, new Node<>(value, head));
+        Node<E> newNode = new Node<>(value, null);
         if (this.head == null) {
-           this.head = newNode.next;
-        } else {
-            newNode.next = this.head;
-            this.head = newNode;
+           this.head = newNode;
+           return;
+        }
+        Node<E> tail = head;
+        while (tail.next != null) {
+            tail = tail.next;
         }
             this.size++;
         this.modCount++;
