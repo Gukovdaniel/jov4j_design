@@ -6,22 +6,31 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     private int size = 0;
     private int modCount = 0;
     private Node<E> head;
+    private Node<E> tail;
 
     @Override
     public void add(E value) {
         Node<E> newLink = new Node<>(value, null);
-        newLink.next = this.head;
-        this.head = newLink;
-        this.size++;
+        if (head == null) {
+            head = newLink;
+        } else {
+           tail.next = newLink;
+        }
+        tail = newLink;
         modCount++;
+        size++;
     }
+
 
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> target = head;
-        for (int i = 0; i <= index; i++) {
-            target = getNextEl(target);
+        for (int i = 0; i < size; i++) {
+            if (i == index) {
+                break;
+            }
+            target = target.next;
         }
         return target.item;
     }
@@ -33,23 +42,23 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
-            private int cursor = 0;
+            private Node<E> cursor = head;
             private int expectedModCount = modCount;
 
             @Override
             public boolean hasNext() {
                 checkModCount();
-                cursor++;
-                return cursor < size + 1;
+                return cursor != null;
             }
 
             @Override
             public E next() {
-                checkModCount();
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return head.item;
+                E item = cursor.item;
+                cursor = cursor.next;
+                return item;
             }
 
             private void checkModCount() {
