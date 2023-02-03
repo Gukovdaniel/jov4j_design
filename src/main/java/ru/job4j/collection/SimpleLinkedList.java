@@ -2,11 +2,10 @@ package ru.job4j.collection;
 
 import java.util.*;
 
-public class SimpleLinkedList<E> implements LinkedList<E> {
+    public class SimpleLinkedList<E> implements LinkedList<E> {
     private int size = 0;
     private int modCount = 0;
     private Node<E> head;
-    private Node<E> tail;
 
     @Override
     public void add(E value) {
@@ -14,29 +13,23 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
         if (head == null) {
             head = newLink;
         } else {
-           tail.next = newLink;
+            while (newLink.next == null) {
+                newLink.next = head;
+                head = newLink;
+            }
+            modCount++;
+            size++;
         }
-        tail = newLink;
-        modCount++;
-        size++;
     }
-
 
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> target = head;
-        for (int i = 0; i < size; i++) {
-            if (i == index) {
-                break;
-            }
+        for (int i = 0; i <= index; i++) {
             target = target.next;
         }
         return target.item;
-    }
-
-    private Node<E> getNextEl(Node<E> current) {
-        return current.next;
     }
 
     @Override
@@ -47,7 +40,9 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
 
             @Override
             public boolean hasNext() {
-                checkModCount();
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return cursor != null;
             }
 
@@ -59,12 +54,6 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 E item = cursor.item;
                 cursor = cursor.next;
                 return item;
-            }
-
-            private void checkModCount() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
             }
         };
     }
