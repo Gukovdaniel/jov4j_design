@@ -19,11 +19,15 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        Node<E> target = head.next;
-        for (int i = 0; i < index; i++) {
-            target = target.next;
+        Node<E> target = head;
+        for (int i = 0; i <= index; i++) {
+            target = getNextEl(target);
         }
         return target.item;
+    }
+
+    private Node<E> getNextEl(Node<E> current) {
+        return current.next;
     }
 
     @Override
@@ -35,7 +39,8 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
             @Override
             public boolean hasNext() {
                 checkModCount();
-                return cursor < size;
+                cursor++;
+                return cursor < size + 1;
             }
 
             @Override
@@ -44,7 +49,6 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                cursor++;
                 return head.item;
             }
 
