@@ -18,14 +18,14 @@ import java.util.*;
                 tmp = tmp.next;
             }
             tmp.next = newLink;
-            modCount++;
-            size++;
         }
+        modCount++;
+        size++;
     }
 
     @Override
     public E get(int index) {
-        Objects.checkIndex(index, size + 1);
+        Objects.checkIndex(index, size);
         Node<E> target = head;
         for (int i = 0; i < index; i++) {
             target = target.next;
