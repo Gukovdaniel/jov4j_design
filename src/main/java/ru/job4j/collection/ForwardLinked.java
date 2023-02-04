@@ -2,6 +2,7 @@ package ru.job4j.collection;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class ForwardLinked<T> implements Iterable<T> {
         }
     }
 
+
     public T get(int index) {
         Objects.checkIndex(index, size + 1);
         Node<T> target = head;
@@ -37,11 +39,11 @@ public class ForwardLinked<T> implements Iterable<T> {
     public T deleteFirst() {
         if (head == null) {
             throw new NoSuchElementException();
-        } else {
-            T rsl = head.item;
-            head = head.next;
-            return rsl;
         }
+        Node<T> emt = new Node<>(null, head.next);
+        head.next = null;
+        head = emt.next;
+        return head.item;
     }
 
     @Override
