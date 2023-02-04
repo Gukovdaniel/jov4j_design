@@ -13,10 +13,11 @@ import java.util.*;
         if (head == null) {
             head = newLink;
         } else {
-            while (newLink.next == null) {
-                newLink.next = head;
-                head = newLink;
+            Node<E> tmp = head;
+            while (tmp.next != null) {
+                tmp = tmp.next;
             }
+            tmp.next = newLink;
             modCount++;
             size++;
         }
@@ -24,9 +25,9 @@ import java.util.*;
 
     @Override
     public E get(int index) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, size + 1);
         Node<E> target = head;
-        for (int i = 0; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
             target = target.next;
         }
         return target.item;
