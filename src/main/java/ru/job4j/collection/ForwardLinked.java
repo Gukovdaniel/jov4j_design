@@ -21,14 +21,14 @@ public class ForwardLinked<T> implements Iterable<T> {
                 tmp = tmp.next;
             }
             tmp.next = tNode;
-            size++;
-            modCount++;
         }
+        size++;
+        modCount++;
     }
 
 
     public T get(int index) {
-        Objects.checkIndex(index, size + 1);
+        Objects.checkIndex(index, size);
         Node<T> target = head;
         for (int i = 0; i < index; i++) {
             target = target.next;
