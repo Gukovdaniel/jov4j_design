@@ -3,15 +3,18 @@ package ru.job4j.collection;
 public class SimpleQueue<T> {
     private final SimpleStack<T> in = new SimpleStack<>();
     private final SimpleStack<T> out = new SimpleStack<>();
-    int inCount = 0;
-    int outCount = 0;
+    private int inCount = 0;
+    private int outCount = 0;
 
     public T poll() {
-        while (0 < inCount) {
-            out.push(in.pop());
-            inCount--;
-            outCount++;
+        if (outCount == 0) {
+            while (0 < inCount) {
+                out.push(in.pop());
+                inCount--;
+                outCount++;
+            }
         }
+        outCount--;
         return out.pop();
     }
 
