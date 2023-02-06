@@ -41,6 +41,13 @@ class SimpleQueueTest {
     }
 
     @Test
+    void whenEmptyInAndOut() {
+        queue.poll();
+        assertThatThrownBy(queue::poll)
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
     void when2PushPollPushPollEmpty() {
         queue.poll();
         queue.push(2);
