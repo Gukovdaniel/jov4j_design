@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 
 class SimpleQueueTest {
+
     private SimpleQueue<Integer> queue;
 
     @BeforeEach
