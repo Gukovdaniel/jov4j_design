@@ -1,15 +1,11 @@
 package ru.job4j.hash;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class User {
     private String name;
     private int children;
     private Calendar birthday;
-
 
     public User(String name, int children, Calendar birthday) {
         this.name = name;
@@ -19,7 +15,7 @@ public class User {
 
     public static void main(String[] args) {
         Map<User, Object> map = new HashMap<>();
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = new GregorianCalendar(1992, 0, 6, 17, 5, 00);
         User user = new User("Daniil", 5, calendar);
         int hashcode1 = user.hashCode();
         int hash1 = hashcode1 ^ (hashcode1 >>> 16);
@@ -36,5 +32,25 @@ public class User {
         System.out.println();
         System.out.printf("User хэшкод: %s, хэш: %s, бакет: %s",
                 hashcode2, hash2, bucket2);
+        System.out.println();
+        System.out.println(user == user2);
+        System.out.println(map.size());
+    }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        User user = (User) o;
+//        return children == user.children && Objects.equals(name, user.name) && Objects.equals(birthday, user.birthday);
+//    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children, birthday);
     }
 }
