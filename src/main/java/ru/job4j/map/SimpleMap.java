@@ -3,6 +3,7 @@ package ru.job4j.map;
 import java.util.*;
 
 public class SimpleMap<K, V> implements Map<K, V> {
+
     private static final float LOAD_FACTOR = 0.75f;
 
     private int capacity = 8;
@@ -16,18 +17,24 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        int index = hash(key.hashCode());
-        int i = indexFor(index);
-        if (table[i] == null) {
-            if (count >= capacity * LOAD_FACTOR) {
-                expand();
-            }
-            table[i] = new MapEntry<>(key, value);
+        if (count >= capacity * LOAD_FACTOR) {
+            expand();
+        }
+        if (table[index(key)] == null) {
+            table[index(key)] = new MapEntry<>(key, value);
             count++;
             modCount++;
             return true;
         }
         return false;
+    }
+
+    public int index(K key) {
+        if (key == null) {
+            return 0;
+        }
+        int index = hash(key.hashCode());
+        return indexFor(index);
     }
 
     private int hash(int hashCode) {
@@ -41,7 +48,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     private void expand() {
     capacity *= 2;
     MapEntry<K, V>[] temp = new MapEntry[capacity];
-    for (MapEntry<K, V> t : table) {
+    for (MapEntry<K, V> t : temp) {
         if (t != null) {
             temp[hash(t.hashCode())] = t;
         }
@@ -51,39 +58,33 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        int index = hash(key.hashCode());
-        int i = indexFor(index);
-        if (table[i] != null && table[i].key.equals(key)) {
-            return table[i].value;
-        }
-        throw new NoSuchElementException();
+        MapEntry<K, V> mapEntry = table[index(key)];
+        return mapEntry == null ? null : mapEntry.value;
     }
 
     @Override
     public boolean remove(K key) {
-        int index = hash(key.hashCode());
-        int i = indexFor(index);
-        if (table[i] != null && table[i].key.equals(key)) {
-            table[i] = null;
-            count--;
-            modCount++;
-            return true;
+        MapEntry<K, V> mapEntry = table[index(key)];
+        if (mapEntry == null || !Objects.equals(key, mapEntry.key)) {
+            return false;
         }
-        return false;
+        table[index(key)] = null;
+        modCount++;
+        count--;
+        return true;
     }
 
     @Override
     public Iterator<K> iterator() {
         return new Iterator<K>() {
             private int index = 0;
-            private final int expectMod = modCount;
 
             @Override
             public boolean hasNext() {
-                if (expectMod != modCount) {
-                    throw new ConcurrentModificationException();
+                while (index < capacity && table[index] == null) {
+                    index++;
                 }
-                return index < count;
+                return index < capacity;
             }
 
             @Override
@@ -91,10 +92,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                while (table[index] == null) {
-                    index++;
-                }
-                return (K) table[index++].value;
+                return table[index++].key;
             }
         };
     }
@@ -107,24 +105,5 @@ public class SimpleMap<K, V> implements Map<K, V> {
             this.key = key;
             this.value = value;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        SimpleMap<?, ?> simpleMap = (SimpleMap<?, ?>) o;
-        return capacity == simpleMap.capacity && count == simpleMap.count && modCount == simpleMap.modCount && Arrays.equals(table, simpleMap.table);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(capacity, count, modCount);
-        result = 31 * result + Arrays.hashCode(table);
-        return result;
     }
 }

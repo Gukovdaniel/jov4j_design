@@ -52,6 +52,11 @@ class SimpleMapTest {
     }
 
     @Test
+    void whenCheckIndex() {
+        assertThat(map.index(15)).isLessThan(8);
+    }
+
+    @Test
     void whenCheckIterator() {
         map.remove(2);
         map.remove(3);
