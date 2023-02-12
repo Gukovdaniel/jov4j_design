@@ -58,6 +58,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
+
         MapEntry<K, V> mapEntry = table[index(key)];
         return mapEntry == null ? null : mapEntry.value;
     }
@@ -78,9 +79,13 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public Iterator<K> iterator() {
         return new Iterator<K>() {
             private int index = 0;
+            private int expectedMoodCount = modCount;
 
             @Override
             public boolean hasNext() {
+                if (expectedMoodCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 while (index < capacity && table[index] == null) {
                     index++;
                 }
