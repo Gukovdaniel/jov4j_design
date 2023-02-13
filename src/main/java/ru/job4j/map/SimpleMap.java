@@ -53,19 +53,34 @@ public class SimpleMap<K, V> implements Map<K, V> {
         }
         table = temp;
     }
+    //    public V get1(K key) {
+//        V value = null;
+//        MapEntry<K, V> mapEntry = table[index(key)];
+//        if (Objects.equals(key, mapEntry.key)) {
+//            if (key == null) {
+//                value = table[0].value;
+//            } else if (table[index(key)] != null) {
+//                if (table[index(key)].key.hashCode() == key.hashCode()
+//                        && Objects.equals(table[index(key)].key, key)) {
+//                    value = mapEntry.value;
+//                }
+//            }
+//        }
+//        return value;
+//    }
 
     @Override
     public V get(K key) {
         V value = null;
         MapEntry<K, V> mapEntry = table[index(key)];
-        if (key == null && table[index(key)].value != null) {
-            value = table[0].value;
-        } else if (table[index(key)] != null) {
-                if (table[index(key)].key.hashCode() == key.hashCode()
-                        && Objects.equals(table[index(key)].key, key)) {
-                    value = mapEntry.value;
-                }
+        if (table[index(key)] != null || Objects.equals(key, table[index(key)].key)) {
+            if (key == null) {
+                value = table[0].value;
+            } else if (table[index(key)].key.hashCode() == key.hashCode()
+                    && Objects.equals(table[index(key)].key, key)) {
+                value = mapEntry.value;
             }
+        }
         return value;
     }
 
@@ -73,17 +88,19 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public boolean remove(K key) {
         boolean rsl = false;
         MapEntry<K, V> mapEntry = table[index(key)];
-        if (key == null && mapEntry.value != null) {
-            table[index(key)] = null;
-            rsl = true;
-        }
-        if (table[index(key)] != null) {
-            if (table[index(key)].key.hashCode() == key.hashCode()
-                    && Objects.equals(table[index(key)].key, key)) {
-                table[index(key)] = null;
-                modCount++;
-                count--;
+        if (Objects.equals(key, mapEntry.key)) {
+            if (key == null && mapEntry.value != null) {
+                table[0] = null;
                 rsl = true;
+            }
+            if (table[index(key)] != null) {
+                if (table[index(key)].key.hashCode() == key.hashCode()
+                        && Objects.equals(table[index(key)].key, key)) {
+                    table[index(key)] = null;
+                    modCount++;
+                    count--;
+                    rsl = true;
+                }
             }
         }
         return rsl;
