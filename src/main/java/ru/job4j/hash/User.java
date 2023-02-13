@@ -16,11 +16,11 @@ public class User {
     public static void main(String[] args) {
         Map<User, Object> map = new HashMap<>();
         Calendar calendar = new GregorianCalendar(1992, 0, 6, 17, 5, 00);
-        User user = new User("Daniil", 5, calendar);
+        User user = new User(null, 5, calendar);
         int hashcode1 = user.hashCode();
         int hash1 = hashcode1 ^ (hashcode1 >>> 16);
         int bucket = hash1 & 15;
-        User user2 = new User("Daniil", 5, calendar);
+        User user2 = new User("L", 5, calendar);
         int hashcode2 = user2.hashCode();
         int hash2 = hashcode2 ^ (hashcode2 >>> 16);
         int bucket2 = hash2 & 15;
