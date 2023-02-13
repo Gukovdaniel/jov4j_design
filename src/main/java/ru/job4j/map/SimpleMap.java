@@ -59,7 +59,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         V value = null;
         int i = index(key);
         if (getRemove(key, i)) {
-            value = table[index(key)].value;
+            value = table[i].value;
         }
         return value;
     }
