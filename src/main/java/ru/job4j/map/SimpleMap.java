@@ -67,7 +67,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         }
         return value;
     }
-     /*  @Override
+     /**  @Override
     public boolean remove(K key) {
         boolean rsl = false;
         MapEntry<K, V> mapEntry = table[index(key)];
