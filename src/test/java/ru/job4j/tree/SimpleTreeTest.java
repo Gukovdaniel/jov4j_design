@@ -24,6 +24,14 @@ public class SimpleTreeTest {
     }
 
     @Test
+    void whenElementDoubling() {
+        Tree<Integer> tree = new SimpleTree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 2);
+        assertThat(tree.findBy(2)).isPresent();
+    }
+
+    @Test
     void whenChildExistOnLeafThenNotAdd() {
         Tree<Integer> tree = new SimpleTree<>(1);
         tree.add(1, 2);
