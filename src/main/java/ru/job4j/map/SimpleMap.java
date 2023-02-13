@@ -58,10 +58,15 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public V get(K key) {
         V value = null;
         MapEntry<K, V> mapEntry = table[index(key)];
-        if (key == null) {
+
+        if (key == null && mapEntry.value != null) {
             value = mapEntry.value;
+        } else if (key == null && mapEntry.value == null) {
+            value = null;
+        } else if (key.hashCode() == 0) {
+            value = null;
         } else if (mapEntry != null) {
-            if ((mapEntry.key.hashCode() == key.hashCode() && mapEntry.key.equals(key))) {
+            if ((mapEntry.key.equals(key) && mapEntry.key.hashCode() == key.hashCode())) {
                 value = mapEntry.value;
             }
         }
@@ -86,12 +91,17 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 rsl = true;
         }
         return rsl;
+
+     if (key == null && mapEntry.value != null) {
     }*/
     @Override
     public boolean remove(K key) {
         boolean rsl = true;
         MapEntry<K, V> mapEntry = table[index(key)];
-        if (mapEntry == null || !Objects.equals(key, mapEntry.key)) {
+        if (key == null && mapEntry.value != null) {
+           mapEntry.value = null;
+           rsl = true;
+        } else if (mapEntry == null || !Objects.equals(key, mapEntry.key)) {
             rsl = false;
         }
         table[index(key)] = null;
