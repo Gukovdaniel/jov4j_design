@@ -21,8 +21,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
         if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
-        if (table[index(key)] == null) {
-            table[index(key)] = new MapEntry<>(key, value);
+        int i = index(key);
+        if (table[i] == null) {
+            table[i] = new MapEntry<>(key, value);
             count++;
             modCount++;
             rsl = true;
@@ -39,26 +40,53 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int indexFor(int hash) {
-        return hash & (table.length - 1);
+        return hash & (capacity - 1);
     }
 
     private void expand() {
-    capacity *= 2;
-    MapEntry<K, V>[] temp = new MapEntry[capacity];
-    for (MapEntry<K, V> t : table) {
-        if (t != null) {
-            temp[index(t.key)] = t;
+        capacity *= 2;
+        MapEntry<K, V>[] temp = new MapEntry[capacity];
+        for (MapEntry<K, V> t : table) {
+            if (t != null) {
+                temp[index(t.key)] = t;
+            }
         }
-    }
-    table = temp;
+        table = temp;
     }
 
     @Override
     public V get(K key) {
+        V value = null;
         MapEntry<K, V> mapEntry = table[index(key)];
-        return mapEntry == null ? null : mapEntry.value;
+        if (key == null) {
+            value = mapEntry.value;
+        } else if (mapEntry != null) {
+            if ((mapEntry.key.hashCode() == key.hashCode() && mapEntry.key.equals(key))) {
+                value = mapEntry.value;
+            }
+        }
+        return value;
     }
-
+     /*  @Override
+    public boolean remove(K key) {
+        boolean rsl = false;
+        MapEntry<K, V> mapEntry = table[index(key)];
+        if (mapEntry == null) {
+            rsl = false;
+        }
+        if (key == null) {
+            table[0] = null;
+            modCount++;
+            count--;
+            rsl = true;
+        } else if ((mapEntry.key.hashCode() == key.hashCode() && mapEntry.key.equals(key))) {
+                table[index(key)] = null;
+                modCount++;
+                count--;
+                rsl = true;
+        }
+        return rsl;
+    }*/
     @Override
     public boolean remove(K key) {
         boolean rsl = true;
