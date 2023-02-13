@@ -53,55 +53,35 @@ public class SimpleMap<K, V> implements Map<K, V> {
         }
         table = temp;
     }
-    //    public V get1(K key) {
-//        V value = null;
-//        MapEntry<K, V> mapEntry = table[index(key)];
-//        if (Objects.equals(key, mapEntry.key)) {
-//            if (key == null) {
-//                value = table[0].value;
-//            } else if (table[index(key)] != null) {
-//                if (table[index(key)].key.hashCode() == key.hashCode()
-//                        && Objects.equals(table[index(key)].key, key)) {
-//                    value = mapEntry.value;
-//                }
-//            }
-//        }
-//        return value;
-//    }
 
     @Override
     public V get(K key) {
         V value = null;
-        MapEntry<K, V> mapEntry = table[index(key)];
-        if (table[index(key)] != null || Objects.equals(key, table[index(key)].key)) {
-            if (key == null) {
-                value = table[0].value;
-            } else if (table[index(key)].key.hashCode() == key.hashCode()
-                    && Objects.equals(table[index(key)].key, key)) {
-                value = mapEntry.value;
-            }
+        if (getRemove(key)) {
+            value = table[index(key)].value;
         }
         return value;
+    }
+
+    public boolean getRemove(K key) {
+        boolean rsl = false;
+        MapEntry<K, V> mapEntry = table[index(key)];
+        if (mapEntry != null
+                && Objects.hashCode(key) == Objects.hashCode(mapEntry.key)
+                && Objects.equals(key, mapEntry.key)) {
+            rsl = true;
+        }
+        return rsl;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        MapEntry<K, V> mapEntry = table[index(key)];
-        if (Objects.equals(key, mapEntry.key)) {
-            if (key == null && mapEntry.value != null) {
-                table[0] = null;
-                rsl = true;
-            }
-            if (table[index(key)] != null) {
-                if (table[index(key)].key.hashCode() == key.hashCode()
-                        && Objects.equals(table[index(key)].key, key)) {
-                    table[index(key)] = null;
-                    modCount++;
-                    count--;
-                    rsl = true;
-                }
-            }
+       if (getRemove(key)) {
+            table[index(key)] = null;
+            count--;
+            modCount++;
+            rsl = true;
         }
         return rsl;
     }
