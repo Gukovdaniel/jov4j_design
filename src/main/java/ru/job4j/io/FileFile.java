@@ -10,28 +10,25 @@ import java.util.Arrays;
 public class FileFile {
 
     public static void main(String[] args) {
-        StringBuilder sb = new StringBuilder();
-        for (int[] s1 : multiple(5)) {
-            sb.append(Arrays.toString(s1)).append('\n');
-        }
-        String s = sb.toString();
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter("data/dataresult.txt");
-            fileWriter.write(s);
+            fileWriter.write(multiple(4));
             fileWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static int[][] multiple(int size) {
-        int[][] multiple = new int[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                multiple[i][j] = (i + 1) * (j + 1);
+    public static String multiple(int size) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
+                stringBuilder.append(i * j + " ");
             }
+            stringBuilder.append("\r\n");
         }
-        return multiple;
+        return stringBuilder.toString();
     }
 }
