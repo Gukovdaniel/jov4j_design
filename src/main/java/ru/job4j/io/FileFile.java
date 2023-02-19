@@ -1,21 +1,13 @@
 package ru.job4j.io;
 
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class FileFile {
-
     public static void main(String[] args) {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter("data/dataresult.txt");
+        try (FileWriter fileWriter = new FileWriter("data/dataresult.txt")) {
             fileWriter.write(multiple(4));
-            fileWriter.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -25,7 +17,8 @@ public class FileFile {
 
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
-                stringBuilder.append(i * j + " ");
+                stringBuilder.append(i * j);
+                stringBuilder.append(" ");
             }
             stringBuilder.append("\r\n");
         }
