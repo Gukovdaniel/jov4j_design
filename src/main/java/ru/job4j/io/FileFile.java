@@ -14,7 +14,6 @@ public class FileFile {
 
     public static String multiple(int size) {
         StringBuilder stringBuilder = new StringBuilder();
-
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
                 stringBuilder.append(i * j);
