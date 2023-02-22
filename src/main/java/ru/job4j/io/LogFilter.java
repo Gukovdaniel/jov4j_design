@@ -26,7 +26,7 @@ public class LogFilter {
             for (String s : log) {
                 out.println(s);
             }
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
