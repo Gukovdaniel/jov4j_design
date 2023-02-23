@@ -28,7 +28,7 @@ class ConfigTest {
         Config config = new Config(path);
         config.load();
         assertThatThrownBy(() -> config.value("name"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Exception");
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("impl");
     }
 }
