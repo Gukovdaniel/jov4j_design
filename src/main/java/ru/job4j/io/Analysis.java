@@ -14,19 +14,14 @@ public class Analysis {
           PrintWriter pr = new PrintWriter(new FileOutputStream(target))) {
          List<String> list = new ArrayList<>();
          String c;
-         while ((c = br.readLine()) != null) {
-             if (c.contains(" ")) {
-                 list.add(c);
-             }
-         }
          String start = null;
          String end = null;
-         for (String line : list) {
-             if (start == null && (line.startsWith("400") || line.startsWith("500"))) {
-                 String[] split = line.split(" ");
+         while ((c = br.readLine()) != null) {
+             if (start == null && (c.startsWith("400") || c.startsWith("500"))) {
+                 String[] split = c.split(" ");
                  start = split[1] + ";";
-             } else if (start != null && !(line.startsWith("400") || line.startsWith("500"))) {
-                 String[] split = line.split(" ");
+             } else if (start != null && !(c.startsWith("400") || c.startsWith("500"))) {
+                 String[] split = c.split(" ");
                  end = split[1];
              }
              if (start != null && end != null) {
