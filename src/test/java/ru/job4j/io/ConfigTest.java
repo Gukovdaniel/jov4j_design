@@ -27,6 +27,8 @@ class ConfigTest {
         String path = "data/appErr.properties";
         Config config = new Config(path);
         config.load();
-        assertThatThrownBy(()-> config.value("name")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> config.value("name"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Exception");
     }
 }

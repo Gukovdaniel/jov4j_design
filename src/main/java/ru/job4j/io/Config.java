@@ -25,7 +25,7 @@ public class Config {
                     if (parts.length >= 2) {
                         values.put(parts[0], parts[1]);
                     }
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException(String.format("Exception is here"));
                 }
             }
         } catch (IOException e) {
