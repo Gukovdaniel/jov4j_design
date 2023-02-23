@@ -24,14 +24,14 @@ public class Analysis {
          for (String line : list) {
              if (start == null && (line.startsWith("400") || line.startsWith("500"))) {
                  String[] split = line.split(" ");
-                 start = split[1];
+                 start = split[1] + ";";
              } else if (start != null && !(line.startsWith("400") || line.startsWith("500"))) {
                  String[] split = line.split(" ");
                  end = split[1];
              }
              if (start != null && end != null) {
-                 pr.print(start + ";");
-                 pr.print(end + "\r\n");
+                 pr.print(start);
+                 pr.print(end + System.lineSeparator());
                  start = null;
                  end = null;
              }
