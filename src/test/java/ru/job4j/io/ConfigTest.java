@@ -27,8 +27,7 @@ class ConfigTest {
         String path = "data/appErr.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("name"))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThat(config.value("name")).isEqualTo("");
     }
 
     @Test
@@ -46,6 +45,6 @@ class ConfigTest {
         Config config = new Config(path);
         config.load();
         assertThatThrownBy(() -> config.value("name"))
-                .isInstanceOf(UnsupportedOperationException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

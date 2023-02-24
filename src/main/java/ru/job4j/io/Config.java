@@ -17,18 +17,18 @@ public class Config {
     }
 
     public void load() {
+        final String SP = "=";
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
-            String c;
-            while ((c = read.readLine()) != null) {
-                if (c.contains("=") && !c.contains("#")) {
-                    String[] parts = c.split("=");
-                    if (parts.length >= 2) {
-                        values.put(parts[0], parts[1]);
-                    } else {
-                        throw new IllegalArgumentException();
+            read.lines().forEach(
+                    line -> {
+                        if (line.contains(SP)) {
+                            int pos = line.indexOf(SP);
+                            values.put(line.substring(0, pos), line.substring(pos + 1));
+                        } else {
+                            values.put(line, "");
+                        }
                     }
-                }
-            }
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class Config {
         if (values.containsKey(key)) {
             return values.get(key);
         }
-        throw new UnsupportedOperationException("Don't impl this method yet!");
+        throw new IllegalArgumentException("Don't impl this method yet!");
     }
 
     @Override
