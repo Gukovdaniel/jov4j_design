@@ -26,16 +26,15 @@ class ConfigTest {
     void whenPairWithoutValue() {
         String path = "data/appErr.properties";
         Config config = new Config(path);
-        config.load();
-        assertThat(config.value("name")).isEqualTo("");
+        assertThatThrownBy(config::load)
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void whenPairWithoutKey() {
         String path = "data/appWithoutKey.properties";
         Config config = new Config(path);
-        config.load();
-        assertThatThrownBy(() -> config.value(null))
+        assertThatThrownBy(config::load)
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -43,8 +42,7 @@ class ConfigTest {
     void whenPairWithoutEquals() {
         String path = "data/appWithoutSignEquals.properties";
         Config config = new Config(path);
-        config.load();
-        assertThatThrownBy(() -> config.value("name"))
+        assertThatThrownBy(config::load)
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
