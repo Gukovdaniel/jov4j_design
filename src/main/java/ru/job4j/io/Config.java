@@ -24,6 +24,8 @@ public class Config {
                     String[] parts = c.split("=");
                     if (parts.length >= 2) {
                         values.put(parts[0], parts[1]);
+                    } else {
+                        throw new IllegalArgumentException();
                     }
                 }
             }
