@@ -18,22 +18,23 @@ public class Config {
     }
 
     public void load() {
-        final String SP = "=";
+        final String sp = "=";
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
             read.lines().forEach(
                     line -> {
-                        int pos = line.indexOf(SP);
-                        if (line.contains(SP)) {
-                            if (!line.substring(0, pos).isEmpty() && !line.substring(pos + 1).isEmpty()) {
-                                values.put(line.substring(0, pos), line.substring(pos + 1));
-                            } else {
+                        int pos = line.indexOf(sp);
+                        if (line.contains(sp)) {
+                            if (line.substring(0, pos).isEmpty() || line.substring(pos + 1).isEmpty()) {
                                 throw new IllegalArgumentException();
                             }
-                        } else if (line.isEmpty() || line.contains("#")) {
-                                values.put(line, "");
-                            } else if (!line.contains(SP) || line.substring(0, pos).isEmpty() || line.substring(pos + 1).isEmpty()) {
-                                throw new IllegalArgumentException();
-                            }
+                            values.put(line.substring(0, pos), line.substring(pos + 1));
+                        }
+                        if (!line.contains(sp) && !line.isEmpty() && !line.contains("#")) {
+                            throw new IllegalArgumentException();
+                        }
+                        if (line.contains("#") || line.isEmpty()) {
+                            values.put(line, "");
+                        }
                     });
         } catch (IOException e) {
             e.printStackTrace();
