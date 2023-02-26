@@ -14,8 +14,8 @@ import java.util.function.Predicate;
 
 public class SearchFiles extends PrintFiles {
 
-    final Predicate<Path> condition;
-    List<Path> paths = new ArrayList<>();
+    private final Predicate<Path> condition;
+    private List<Path> paths = new ArrayList<>();
 
     public SearchFiles(Predicate<Path> condition) {
         this.condition = condition;
