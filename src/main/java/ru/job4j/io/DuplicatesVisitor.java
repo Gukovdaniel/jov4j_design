@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    List<FileProperty> fp = new ArrayList<>();
-    Set<FileProperty> set = new HashSet<>();
+    private List<FileProperty> fp = new ArrayList<>();
+    private Set<FileProperty> set = new HashSet<>();
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -23,12 +23,13 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     }
 
     public void console() {
-        fp.stream()
-                .filter(e -> !set.add(e))
-                .collect(Collectors.toSet());
-        for (FileProperty f : set) {
-            System.out.println(f.getName());
-            System.out.println(f.getSize());
+        for (FileProperty f : fp) {
+            if (set.contains(f)) {
+                set.add(f);
+            } else {
+                System.out.println("путь к файлу...");
+
+            }
         }
     }
 }
