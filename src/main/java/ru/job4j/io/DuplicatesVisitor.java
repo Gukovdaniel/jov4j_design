@@ -28,6 +28,7 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
                 .collect(Collectors.toSet());
         for (FileProperty f : set) {
             System.out.println(f.getName());
+            System.out.println(f.getSize());
         }
     }
 }
