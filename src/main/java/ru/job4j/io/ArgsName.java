@@ -8,7 +8,7 @@ public class ArgsName {
 
     public String get(String key) {
         if (!values.containsKey(key)) {
-            throw new IllegalArgumentException("This key: '" + key + "' is missing");
+            throw new IllegalArgumentException(String.format("This key: '%s' is missing", key));
         }
         return values.get(key);
     }
