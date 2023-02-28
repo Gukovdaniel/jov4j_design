@@ -9,11 +9,10 @@ import java.util.function.Predicate;
 
 public class Search {
     public static void main(String[] args) throws IOException {
-        if (val(args[0], args[1])) {
+        val(args);
             Path start = Paths.get(args[0]);
             search(start, p -> p.toFile().getName().endsWith(args[1]))
                     .forEach(System.out::println);
-        }
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
@@ -22,10 +21,12 @@ public class Search {
         return searcher.getPaths();
     }
 
-    public static boolean val(String first, String second) {
-        if (!(first == ".") && !(second == ".js")) {
+    private static void val(String[] args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException();
+        }
+        if (!(args[0] == ".") && !(args[1] == ".js")) {
             throw new ArrayIndexOutOfBoundsException("Err");
         }
-        return true;
     }
 }
