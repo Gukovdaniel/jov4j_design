@@ -23,13 +23,13 @@ public class Search {
 
     private static void val(String[] args) {
         if (args.length != 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Некорректые параметры");
         }
-        if (args[0] != ".") {
-            throw new IllegalArgumentException("Err with first param");
+        if (!args[0].startsWith(".")) {
+            throw new IllegalArgumentException("Проблема с первым параметром. Тут нужно указать путь");
         }
-        if (args[1] != ".js") {
-            throw new IllegalArgumentException("Err with second param");
+        if (!args[1].startsWith(".") && (args[1].length() <= 1)) {
+            throw new IllegalArgumentException("Проблема с втрорым параметром. Тут нужно указать формат искомого файла");
         }
     }
 }
