@@ -25,8 +25,11 @@ public class Search {
         if (args.length != 2) {
             throw new IllegalArgumentException();
         }
-        if (!(args[0] == ".") && !(args[1] == ".js")) {
-            throw new ArrayIndexOutOfBoundsException("Err");
+        if (args[0] != ".") {
+            throw new IllegalArgumentException("Err with first param");
+        }
+        if (args[1] != ".js") {
+            throw new IllegalArgumentException("Err with second param");
         }
     }
 }
