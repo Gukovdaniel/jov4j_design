@@ -23,8 +23,12 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     }
 
     private void out(Path file, BasicFileAttributes attrs) {
-        System.out.println("Тут лежат одинаковые файлы: ");
+        System.out.printf("%s - %s \r\n", file.getFileName(), attrs.size());
         System.out.println(file.toAbsolutePath());
         System.out.println(fp.get(new FileProperty((attrs.size()), file.getFileName().toString())));
+    }
+
+    public Map<FileProperty, String> getFp() {
+        return fp;
     }
 }
