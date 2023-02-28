@@ -10,15 +10,21 @@ import java.util.stream.Collectors;
 
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    private Map<String, FileProperty> fp = new HashMap<>();
+    private Map<FileProperty, String> fp = new HashMap<>();
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        if (!fp.containsKey(file.getFileName().toString())) {
-            fp.put((file.getFileName().toString()), new FileProperty((attrs.size()), file.toAbsolutePath().toString()));
+        if (!fp.containsKey(new FileProperty((attrs.size()), file.getFileName().toString()))) {
+            fp.put(new FileProperty((attrs.size()), file.getFileName().toString()), file.toAbsolutePath().toString());
         } else {
-            System.out.println(fp.get(file.getFileName().toString()).getName());
+            out(file, attrs);
         }
         return super.visitFile(file, attrs);
+    }
+
+    private void out(Path file, BasicFileAttributes attrs) {
+        System.out.println("Тут лежат одинаковые файлы: ");
+        System.out.println(file.toAbsolutePath());
+        System.out.println(fp.get(new FileProperty((attrs.size()), file.getFileName().toString())));
     }
 }
