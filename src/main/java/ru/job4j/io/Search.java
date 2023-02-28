@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,8 +26,12 @@ public class Search {
         if (args.length != 2) {
             throw new IllegalArgumentException("Некорректые параметры");
         }
-        if (!args[0].startsWith(".")) {
-            throw new IllegalArgumentException("Проблема с первым параметром. Тут нужно указать путь");
+        File file = new File(args[0]);
+        if (!file.exists()) {
+            throw new IllegalArgumentException(String.format("Not exist %s", file.getAbsoluteFile()));
+        }
+        if (!file.isDirectory()) {
+            throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsoluteFile()));
         }
         if (!args[1].startsWith(".") && (args[1].length() <= 1)) {
             throw new IllegalArgumentException("Проблема с втрорым параметром. Тут нужно указать формат искомого файла");
