@@ -39,7 +39,6 @@ public class ArgsName {
         return true;
     }
 
-
     public static ArgsName of(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Arguments not passed to program");
