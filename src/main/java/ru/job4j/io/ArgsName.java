@@ -14,23 +14,29 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
-        final String sp = "=";
         for (String arg : args) {
-            int pos = arg.indexOf(sp);
-            if (!arg.contains("=")) {
-                throw new IllegalArgumentException("Error: This argument '" + arg + "' does not contain an equal sign");
+            if (check(arg)) {
+                int pos = arg.indexOf("=");
+                values.put(arg.substring(1, pos), arg.substring(pos + 1));
             }
-            if (!arg.startsWith("-")) {
-                throw new IllegalArgumentException("Error: This argument '" + arg + "' does not start with a '-' character");
-            }
-            if (arg.substring(1, pos).isEmpty()) {
-                throw new IllegalArgumentException("Error: This argument '" + arg + "' does not contain a key");
-            }
-            if (arg.substring(pos + 1).isEmpty()) {
-                throw new IllegalArgumentException("Error: This argument '" + arg + "' does not contain a value");
-            }
-            values.put(arg.substring(1, pos), arg.substring(pos + 1));
         }
+    }
+
+    private boolean check(String arg) {
+        int pos = arg.indexOf("=");
+        if (!arg.contains("=")) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain an equal sign", arg));
+        }
+        if (!arg.startsWith("-")) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not start with a '-' character", arg));
+        }
+        if (arg.substring(1, pos).isEmpty()) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a key", arg));
+        }
+        if (arg.substring(pos + 1).isEmpty()) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a value", arg));
+        }
+        return true;
     }
 
 
