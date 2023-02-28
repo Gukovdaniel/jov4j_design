@@ -12,6 +12,7 @@ public class DuplicateFinder {
     public static void main(String[] args) throws IOException {
         DuplicatesVisitor dv = new DuplicatesVisitor();
         Files.walkFileTree(Path.of("."), dv);
-        dv.getFp();
+        dv.out(dv.getMap());
+
     }
 }

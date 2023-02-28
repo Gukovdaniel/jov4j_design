@@ -11,24 +11,27 @@ import java.util.stream.Collectors;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     private Map<FileProperty, String> fp = new HashMap<>();
+    private Map<FileProperty, List<String>> fpTemp = new HashMap<>();
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         if (!fp.containsKey(new FileProperty((attrs.size()), file.getFileName().toString()))) {
             fp.put(new FileProperty((attrs.size()), file.getFileName().toString()), file.toAbsolutePath().toString());
         } else {
-            out(file, attrs);
+            fpTemp.put(new FileProperty(attrs.size(), file.getFileName().toString()),
+                    List.of(file.toAbsolutePath().toString(), fp.get(new FileProperty(attrs.size(), file.getFileName().toString()))));
         }
         return super.visitFile(file, attrs);
     }
 
-    private void out(Path file, BasicFileAttributes attrs) {
-        System.out.printf("%s - %s byte \r\n", file.getFileName(), attrs.size());
-        System.out.println(file.toAbsolutePath());
-        System.out.println(fp.get(new FileProperty((attrs.size()), file.getFileName().toString())));
+    public void out(Map<FileProperty, List<String>> map) {
+        for (FileProperty fp : map.keySet()) {
+            System.out.printf("%s - %s byte \r\n", fp.getName(), fp.getSize());
+            map.get(fp).forEach(System.out::println);
+        }
     }
 
-    public Map<FileProperty, String> getFp() {
-        return fp;
+    public Map<FileProperty, List<String>> getMap() {
+        return this.fpTemp;
     }
 }
