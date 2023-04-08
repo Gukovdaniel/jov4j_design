@@ -62,7 +62,7 @@ public class Zip {
         if (!argsName.get("o").endsWith(".zip")) {
             System.out.println("Неправильный ввод создаваемого архива");
         }
-        if (!argsName.get("d").startsWith("c") && !file.exists() && !file.isDirectory()) {
+        if (!file.exists() && !file.isDirectory()) {
             System.out.println("Неправильный ввод пути директории для архивации");
         }
     }
