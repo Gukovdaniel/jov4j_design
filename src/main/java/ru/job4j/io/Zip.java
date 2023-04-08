@@ -9,13 +9,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
-    public void packFiles(List<File> sources, File target) {
+    public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(
                 new BufferedOutputStream(new FileOutputStream(target)))) {
-            for (File file : sources) {
-                zip.putNextEntry(new ZipEntry(file.getPath()));
+            for (Path path : sources) {
+                zip.putNextEntry(new ZipEntry(path.toString()));
                 try (BufferedInputStream out = new BufferedInputStream(
-                        new FileInputStream(file))) {
+                        new FileInputStream(path.toString()))) {
                     zip.write(out.readAllBytes());
                 }
             }
@@ -43,26 +43,26 @@ public class Zip {
         validate(argsName);
         List<Path> listPaths = new ArrayList<>();
         try {
-            listPaths = Search.search(Path.of(args[0]),
+            listPaths = Search.search(Path.of(argsName.get("d")),
                     p -> !p.toFile()
                             .getName()
-                            .endsWith(args[1]));
+                            .endsWith(argsName.get("o")));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<File> listFiles = new ArrayList<>();
-        for (Path path : listPaths) {
-            listFiles.add(path.toFile());
-        }
-        new Zip().packFiles(listFiles, new File(argsName.get("o")));
+        new Zip().packFiles(listPaths, new File(argsName.get("o")));
+
     }
 
     private static void validate(ArgsName argsName) {
-        if (!argsName.get("e").endsWith(".class")) {
+        if (!argsName.get("e").endsWith(argsName.toString())) {
             System.out.println("Неправильный ввод параметра класса");
         }
         if (!argsName.get("o").endsWith(".zip")) {
             System.out.println("Неправильный ввод создаваемого архива");
+        }
+        if (!argsName.get("d").startsWith("c")) {
+            System.out.println("Неправильный ввод пути директории для архивации");
         }
     }
 }

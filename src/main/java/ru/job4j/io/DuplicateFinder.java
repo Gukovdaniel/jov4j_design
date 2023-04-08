@@ -11,8 +11,7 @@ import java.util.stream.Collectors;
 public class DuplicateFinder {
     public static void main(String[] args) throws IOException {
         DuplicatesVisitor dv = new DuplicatesVisitor();
-        Files.walkFileTree(Path.of("."), dv);
-        dv.out(dv.getMap());
+        Files.walkFileTree(Path.of("."), new DuplicatesVisitor());
 
     }
 }
