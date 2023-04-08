@@ -55,13 +55,14 @@ public class Zip {
     }
 
     private static void validate(ArgsName argsName) {
+        File file = new File(argsName.get("d"));
         if (!argsName.get("e").endsWith(".") && argsName.get("e").length() != 1) {
             System.out.println("Неправильный ввод параметра класса");
         }
         if (!argsName.get("o").endsWith(".zip")) {
             System.out.println("Неправильный ввод создаваемого архива");
         }
-        if (!argsName.get("d").startsWith("c") && argsName.get("d").matches("([a-zA-Z]:)?(\\\\[a-zA-Z0-9._-]+)+\\\\?")) {
+        if (!argsName.get("d").startsWith("c") && !file.exists() && !file.isDirectory()) {
             System.out.println("Неправильный ввод пути директории для архивации");
         }
     }
