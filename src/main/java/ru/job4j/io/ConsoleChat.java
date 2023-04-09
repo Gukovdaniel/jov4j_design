@@ -35,7 +35,7 @@ public class ConsoleChat {
             return;
         } else if (!isBotMuted) {
             String response = readPhrases().get(random.nextInt(readPhrases().size()));
-            System.out.println("Бот: " + response);
+            System.out.println("Бот : " + response);
             strings.add("Бот: " + response);
             saveLog(strings);
         }
