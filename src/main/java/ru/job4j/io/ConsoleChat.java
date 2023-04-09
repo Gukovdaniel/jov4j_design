@@ -22,20 +22,19 @@ public class ConsoleChat {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        int index = random.nextInt(readPhrases().size());
         ArrayList<String> strings = new ArrayList<>();
         System.out.print("Вы: ");
         String input = scanner.nextLine();
         strings.add("Вы: " + input);
 
-        if (input.equalsIgnoreCase(STOP)) {
+        if (STOP.equalsIgnoreCase(input)) {
             isBotMuted = true;
-        } else if (input.equalsIgnoreCase(CONTINUE)) {
+        } else if (CONTINUE.equalsIgnoreCase(input)) {
             isBotMuted = false;
-        } else if (input.equalsIgnoreCase(OUT)) {
+        } else if (OUT.equalsIgnoreCase(input)) {
             return;
         } else if (!isBotMuted) {
-            String response = readPhrases().get(index);
+            String response = readPhrases().get(random.nextInt(readPhrases().size()));
             System.out.println("Бот: " + response);
             strings.add("Бот: " + response);
             saveLog(strings);
