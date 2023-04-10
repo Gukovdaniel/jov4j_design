@@ -30,9 +30,9 @@ public class ConsoleChat {
             input = scanner.nextLine();
             strings.add("Вы : " + input);
 
-            if (input.equalsIgnoreCase(STOP)) {
+            if (STOP.equalsIgnoreCase(input)) {
                 isBotMuted = true;
-            } else if (input.equalsIgnoreCase(CONTINUE)) {
+            } else if (CONTINUE.equalsIgnoreCase(input)) {
                 isBotMuted = false;
             } else if (!isBotMuted) {
                 String response = responses.get(random.nextInt(responses.size()));
