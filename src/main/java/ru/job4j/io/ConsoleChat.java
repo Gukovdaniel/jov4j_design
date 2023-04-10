@@ -20,26 +20,28 @@ public class ConsoleChat {
     }
 
     public void run() {
+        System.out.println("Привет. Я бот. Давай общаться. Напиши мне что нибудь");
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+        List<String> responses = readPhrases();
         ArrayList<String> strings = new ArrayList<>();
-        System.out.print("Вы: ");
-        String input = scanner.nextLine();
-        strings.add("Вы: " + input);
+        String input = "";
+        while (!input.equalsIgnoreCase(OUT) && scanner.hasNextLine()) {
+            input = scanner.nextLine();
+            strings.add("Вы : " + input);
 
-        if (STOP.equalsIgnoreCase(input)) {
-            isBotMuted = true;
-        } else if (CONTINUE.equalsIgnoreCase(input)) {
-            isBotMuted = false;
-        } else if (OUT.equalsIgnoreCase(input)) {
-            return;
-        } else if (!isBotMuted) {
-            String response = readPhrases().get(random.nextInt(readPhrases().size()));
-            System.out.println("Бот : " + response);
-            strings.add("Бот: " + response);
-            saveLog(strings);
+            if (input.equalsIgnoreCase(STOP)) {
+                isBotMuted = true;
+            } else if (input.equalsIgnoreCase(CONTINUE)) {
+                isBotMuted = false;
+            } else if (!isBotMuted) {
+                String response = responses.get(random.nextInt(responses.size()));
+                System.out.println("Бот : " + response);
+                strings.add("Бот : " + response);
+                saveLog(strings);
+            }
         }
-        run();
+        System.out.println("До свидания!");
     }
 
         private List<String> readPhrases() {
