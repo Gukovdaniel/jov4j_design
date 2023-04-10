@@ -26,7 +26,7 @@ public class ConsoleChat {
         List<String> responses = readPhrases();
         ArrayList<String> strings = new ArrayList<>();
         String input = "";
-        while (!input.equalsIgnoreCase(OUT) && scanner.hasNextLine()) {
+        while (!OUT.equalsIgnoreCase(input) && scanner.hasNextLine()) {
             input = scanner.nextLine();
             strings.add("Вы : " + input);
 
