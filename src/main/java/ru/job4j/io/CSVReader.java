@@ -1,13 +1,12 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws Exception {
         File file = new File(argsName.get("path"));
+        ArrayList<String> nameAge = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
             scanner.useDelimiter(argsName.get("delimiter")); // задаем разделитель значений
             while (scanner.hasNextLine()) {
@@ -18,15 +17,21 @@ public class CSVReader {
                 if (argsName.get("out").contains("stdout")) {
                     System.out.println("Name: " + name + ", Age: " + age);
                 } else if (file.exists() && !file.isDirectory()) {
-                    try (FileOutputStream fos = new FileOutputStream(file)) {
-                        fos.write(Integer.parseInt("Name: " + name + ", Age: " + age));
-                        System.out.println("Data written to file.");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                   nameAge.add(name);
+                   nameAge.add(age);
                 }
 
             }
+        }
+        conclusion(file, nameAge.get(0), nameAge.get(1));
+    }
+
+    private static void conclusion(File file, String name, String age) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(Integer.parseInt("Name: " + name + ", Age: " + age));
+            System.out.println("Data written to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
