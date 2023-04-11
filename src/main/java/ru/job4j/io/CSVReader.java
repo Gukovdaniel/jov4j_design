@@ -1,9 +1,6 @@
 package ru.job4j.io;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -18,40 +15,52 @@ public class CSVReader {
                 String[] fields = line.split(argsName.get("delimiter"));
                 String name = fields[0];
                 String age = fields[1];
-                System.out.println("Name: " + name + ", Age: " + age);
+                if (argsName.get("out").contains("stdout")) {
+                    System.out.println("Name: " + name + ", Age: " + age);
+                } else if (file.exists() && !file.isDirectory()) {
+                    try (FileOutputStream fos = new FileOutputStream(file)) {
+                        fos.write(Integer.parseInt("Name: " + name + ", Age: " + age));
+                        System.out.println("Data written to file.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         }
     }
-
 
     public static void main(String[] args) throws Exception {
         if (args.length != 4) {
             throw new IllegalArgumentException();
         }
         ArgsName argsName = ArgsName.of(args);
-        val(args);
+        val(argsName);
         handle(argsName);
+
+        /**
+         * Печать результата в консоль надо выполнять,
+         * только если по параметру out передано stdout, а если передано другое -
+         * то считайте, что передано имя файла, который надо создать и вывести результат в него.
+         */
     }
 
-    private static void val(String[] args) {
-        if (args.length != 4) {
-            throw new IllegalArgumentException("Некорректые параметры");
-        }
-        File file = new File(args[0]);
+    private static void val(ArgsName args) {
+        File file = new File(args.get("path"));
         if (!file.exists()) {
             throw new IllegalArgumentException(String.format("Not exist %s", file.getAbsoluteFile()));
         }
-        if (!args[0].endsWith(".csv")) {
+        if (args.get("path").endsWith(".csv")) {
             System.out.println("Неправильный формат");
         }
-        if ((args[1].length() <= 1)) {
+        if ((args.get("delimiter").length() > 1)) {
             throw new IllegalArgumentException("Проблема с втрорым параметром. Тут нужно указать разделитель");
         }
-        File file1 = new File(args[2]);
+        File file1 = new File(args.get("out"));
         if (!file1.exists() && file1.isDirectory()) {
             throw new IllegalArgumentException("Проблема с третьим параметром. Тут нужно указать куда мы сокраняем");
         }
-        if (!args[3].contains("name") && !args[3].contains("age")) {
+        if (!args.get("filter").contains("name") && !args.get("filter").contains("age")) {
             throw new IllegalArgumentException("Введите название столбцов которые хотите вывести");
         }
     }
