@@ -1,36 +1,40 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class CSVReader {
-    public static void handle(ArgsName argsName) throws Exception {
-        File file = new File(argsName.get("path"));
-        ArrayList<String> nameAge = new ArrayList<>();
-        try (Scanner scanner = new Scanner(file)) {
-            scanner.useDelimiter(argsName.get("delimiter"));
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] fields = line.split(argsName.get("delimiter"));
-                nameAge.add(fields[0]);
-                nameAge.add(fields[1]);
+    public static void handle(ArgsName argsName) throws IOException {
+        ArrayList<String> strings = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new ByteArrayInputStream(argsName.get("path")
+                .getBytes(StandardCharsets.UTF_8)))
+                .useDelimiter(argsName.get("delimiter"))) {
+            while (scanner.hasNext()) {
+                if (argsName.get("filter").contains(scanner.next())) {
+                    strings.add(scanner.next());
+                    //Как мне сохранить позицию столбцов из фильтра чтобы по ним вывести остальные значения?
+                }
             }
         }
-        conclusion(file, nameAge.get(0), nameAge.get(1));
+        conclusion(argsName, strings);
     }
 
-    private static void conclusion(File file, String name, String age) throws IOException {
-        if (name.contains("stdout")) {
-            System.out.println("Name: " + name + ", Age: " + age);
+    private static void conclusion(ArgsName argsName, ArrayList<String> strings) throws IOException {
+        File file = new File(argsName.get("out"));
+            if (argsName.get("out").contains("stdout")) {
+            System.out.println(strings);
         } else {
             if (!file.exists()) {
                 file.createNewFile();
-            }
-            try (FileOutputStream fos = new FileOutputStream(file)) {
-                fos.write(("Name: " + name + ", Age: " + age).getBytes());
-                System.out.println("Data written to file.");
-            } catch (IOException e) {
-                e.printStackTrace();
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    for (String s : strings) {
+                        fos.write(s.getBytes(StandardCharsets.UTF_8));
+                        System.out.println("Data written to file.");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
