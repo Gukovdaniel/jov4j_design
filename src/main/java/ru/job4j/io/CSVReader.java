@@ -38,7 +38,7 @@ public class CSVReader {
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     for (String s : strings) {
                         fos.write(s.getBytes(StandardCharsets.UTF_8));
-                        System.out.println("Data written to file.");
+                        System.out.println("Data written to file");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
