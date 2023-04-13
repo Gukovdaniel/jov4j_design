@@ -8,12 +8,20 @@ public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
         ArrayList<String> strings = new ArrayList<>();
         try (Scanner scanner = new Scanner(new ByteArrayInputStream(argsName.get("path")
-                .getBytes(StandardCharsets.UTF_8)))
-                .useDelimiter(argsName.get("delimiter"))) {
+                .getBytes(StandardCharsets.UTF_8)))) {
             while (scanner.hasNext()) {
-                if (argsName.get("filter").contains(scanner.next())) {
-                    strings.add(scanner.next());
-                    //Как мне сохранить позицию столбцов из фильтра чтобы по ним вывести остальные значения?
+                String[] tempAr = scanner.nextLine().split("delimiter");
+                String[] tempFilAr = argsName.get("filter").split(",");
+                List<Integer> index = new ArrayList<>();
+                for (int i = 0; i < tempAr.length; i++) {
+                    for (int j = 0; j < tempFilAr.length; j++) {
+                        if (tempAr[i].equals(tempFilAr[j])) {
+                            index.add(i);
+                            for (int in : index) {
+                                strings.add(tempAr[in]);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -22,7 +30,7 @@ public class CSVReader {
 
     private static void conclusion(ArgsName argsName, ArrayList<String> strings) throws IOException {
         File file = new File(argsName.get("out"));
-            if (argsName.get("out").contains("stdout")) {
+        if (argsName.get("out").contains("stdout")) {
             System.out.println(strings);
         } else {
             if (!file.exists()) {
