@@ -7,22 +7,28 @@ import java.util.*;
 public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
         ArrayList<String> strings = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new ByteArrayInputStream(argsName.get("path")
-                .getBytes(StandardCharsets.UTF_8)))) {
-            while (scanner.hasNext()) {
-                String[] tempAr = scanner.nextLine().split("delimiter");
-                String[] tempFilAr = argsName.get("filter").split(",");
-                List<Integer> index = new ArrayList<>();
-                for (int i = 0; i < tempAr.length; i++) {
-                    for (int j = 0; j < tempFilAr.length; j++) {
-                        if (tempAr[i].equals(tempFilAr[j])) {
-                            index.add(i);
-                            for (int in : index) {
-                                strings.add(tempAr[in]);
-                            }
+        File file = new File(argsName.get("path"));
+        String[] tempFilAr = argsName.get("filter").split(",");
+        System.out.println("tempFilAr = " + Arrays.toString(tempFilAr));
+        List<Integer> index = new ArrayList<>();
+        String[] tempAr = null;
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                tempAr = scanner.nextLine().split(argsName.get("delimiter"));
+                System.out.println("tempAr = " + Arrays.toString(tempAr));
+                for (int i = 0; i < tempFilAr.length; i++) {
+                    for (int j = 0; j < tempAr.length; j++) {
+                        if (tempFilAr[i].equals(tempAr[j])) {
+                            index.add(j);
                         }
                     }
                 }
+                System.out.println("index = " + index);
+                for (int in : index) {
+                    strings.add(tempAr[in] + ";");
+                    System.out.println("strings = " + strings);
+                }
+                strings.add("\n");
             }
         }
         conclusion(argsName, strings);
