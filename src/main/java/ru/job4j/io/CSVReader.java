@@ -8,13 +8,12 @@ public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
         ArrayList<String> strings = new ArrayList<>();
         File file = new File(argsName.get("path"));
-        String[] tempFilAr = argsName.get("filter").split(",");
+        String[] tempFilAr = argsName.get("filter").split(argsName.get("delimiter"));
         System.out.println("tempFilAr = " + Arrays.toString(tempFilAr));
         List<Integer> index = new ArrayList<>();
-        String[] tempAr = null;
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
-                tempAr = scanner.nextLine().split(argsName.get("delimiter"));
+                String[] tempAr = scanner.nextLine().split(argsName.get("delimiter"));
                 System.out.println("tempAr = " + Arrays.toString(tempAr));
                 for (int i = 0; i < tempFilAr.length; i++) {
                     for (int j = 0; j < tempAr.length; j++) {
@@ -24,9 +23,8 @@ public class CSVReader {
                     }
                 }
                 System.out.println("index = " + index);
-                for (int in : index) {
-                    strings.add(tempAr[in] + ";");
-                    System.out.println("strings = " + strings);
+                for (int i = 0; i < index.size(); i++) {
+                    strings.add(i == index.size() - 1 ? tempAr[i] : tempAr[i] + argsName.get("delimiter"));
                 }
                 strings.add("\n");
             }
