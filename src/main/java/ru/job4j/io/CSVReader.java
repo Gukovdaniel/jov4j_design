@@ -6,25 +6,35 @@ import java.util.*;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws IOException {
+        String delimiter = argsName.get("delimiter");
         ArrayList<String> strings = new ArrayList<>();
         File file = new File(argsName.get("path"));
-        String[] tempFilAr = argsName.get("filter").split(argsName.get("delimiter"));
+        String[] tempFilAr = argsName.get("filter").split(delimiter);
         System.out.println("tempFilAr = " + Arrays.toString(tempFilAr));
         List<Integer> index = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String[] tempAr = scanner.nextLine().split(argsName.get("delimiter"));
-                System.out.println("tempAr = " + Arrays.toString(tempAr));
-                for (int i = 0; i < tempFilAr.length; i++) {
-                    for (int j = 0; j < tempAr.length; j++) {
-                        if (tempFilAr[i].equals(tempAr[j])) {
-                            index.add(j);
-                        }
+            String[] tempAr = scanner.nextLine().split(delimiter);
+            for (int i = 0; i < tempFilAr.length; i++) {
+                for (int j = 0; j < tempAr.length; j++) {
+                    if (tempFilAr[i].equals(tempAr[j])) {
+                        index.add(j);
                     }
                 }
+            }
+            String head;
+            if (scanner.hasNextLine()) {
+                head = scanner.nextLine();
+               String[] headAr = head.split(delimiter);
+                for (int i = 0; i < index.size(); i++) {
+                    strings.add(i == index.size() - 1 ? headAr[i] : headAr[i] + delimiter);
+                }
+            }
+            while (scanner.hasNextLine()) {
+                tempAr = scanner.nextLine().split(delimiter);
+                System.out.println("tempAr = " + Arrays.toString(tempAr));
                 System.out.println("index = " + index);
                 for (int i = 0; i < index.size(); i++) {
-                    strings.add(i == index.size() - 1 ? tempAr[i] : tempAr[i] + argsName.get("delimiter"));
+                    strings.add(i == index.size() - 1 ? tempAr[i] : tempAr[i] + delimiter);
                 }
                 strings.add("\n");
             }
