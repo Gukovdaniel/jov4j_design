@@ -9,34 +9,31 @@ public class CSVReader {
         String delimiter = argsName.get("delimiter");
         ArrayList<String> strings = new ArrayList<>();
         File file = new File(argsName.get("path"));
-        String[] tempFilAr = argsName.get("filter").split(delimiter);
-        System.out.println("tempFilAr = " + Arrays.toString(tempFilAr));
+        String[] tempFilAr = argsName.get("filter").split(",");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tempFilAr.length; i++) {
+            sb.append(i == tempFilAr.length - 1 ? tempFilAr[i] + "\n  " : tempFilAr[i] + delimiter);
+        }
+        strings.add(sb.toString());
         List<Integer> index = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
             String[] tempAr = scanner.nextLine().split(delimiter);
-            for (int i = 0; i < tempFilAr.length; i++) {
+            for (String s : tempFilAr) {
                 for (int j = 0; j < tempAr.length; j++) {
-                    if (tempFilAr[i].equals(tempAr[j])) {
+                    if (s.equals(tempAr[j])) {
                         index.add(j);
                     }
                 }
             }
-            String head;
-            if (scanner.hasNextLine()) {
-                head = scanner.nextLine();
-               String[] headAr = head.split(delimiter);
-                for (int i = 0; i < index.size(); i++) {
-                    strings.add(i == index.size() - 1 ? headAr[i] : headAr[i] + delimiter);
-                }
-            }
+
             while (scanner.hasNextLine()) {
                 tempAr = scanner.nextLine().split(delimiter);
-                System.out.println("tempAr = " + Arrays.toString(tempAr));
-                System.out.println("index = " + index);
-                for (int i = 0; i < index.size(); i++) {
-                    strings.add(i == index.size() - 1 ? tempAr[i] : tempAr[i] + delimiter);
+                int cnt = 0;
+                for (int i : index) {
+                    strings.add(cnt == index.size() - 1 ? tempAr[i] : tempAr[i] + delimiter);
+                    cnt++;
                 }
-                strings.add("\n");
+                strings.add("\n" + "  ");
             }
         }
         conclusion(argsName, strings);
@@ -52,7 +49,6 @@ public class CSVReader {
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     for (String s : strings) {
                         fos.write(s.getBytes(StandardCharsets.UTF_8));
-                        System.out.println("Data written to file");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
