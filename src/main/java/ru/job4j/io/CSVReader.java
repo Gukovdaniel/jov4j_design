@@ -41,7 +41,7 @@ public class CSVReader {
 
     private static void conclusion(ArgsName argsName, ArrayList<String> strings) throws IOException {
         File file = new File(argsName.get("out"));
-        if (argsName.get("out").contains("stdout")) {
+        if ("stdout".equals(argsName.get("out"))) {
             System.out.println(strings);
         } else {
             if (!file.exists()) {
