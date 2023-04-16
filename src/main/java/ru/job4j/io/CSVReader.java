@@ -12,7 +12,7 @@ public class CSVReader {
         String[] tempFilAr = argsName.get("filter").split(",");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tempFilAr.length; i++) {
-            sb.append(i == tempFilAr.length - 1 ? tempFilAr[i] + "\n  " : tempFilAr[i] + delimiter);
+            sb.append(i == tempFilAr.length - 1 ? tempFilAr[i] + System.lineSeparator() : tempFilAr[i] + delimiter);
         }
         strings.add(sb.toString());
         List<Integer> index = new ArrayList<>();
@@ -33,7 +33,7 @@ public class CSVReader {
                     strings.add(cnt == index.size() - 1 ? tempAr[i] : tempAr[i] + delimiter);
                     cnt++;
                 }
-                strings.add("\n" + "  ");
+                strings.add(System.lineSeparator());
             }
         }
         conclusion(argsName, strings);
