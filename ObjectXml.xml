@@ -1,0 +1,9 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<!---there are script about some car>
+<car gaz="false" how old="10">
+    <numberMotor="123-321"/>
+    <colors>
+        <colorBody>Red</colorBody>
+        <colorSalon>Beig</colorSalon>
+    </colors>
+</car>
